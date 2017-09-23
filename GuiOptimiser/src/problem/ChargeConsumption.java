@@ -11,12 +11,12 @@ import java.util.Scanner;
 
 import calculation.Calculation;
 import guioptimiser.Capture;
+import solution.Solution;
 
 public class ChargeConsumption {
-	ArrayList<String> guiComponents = new ArrayList<>();
-	ArrayList<ArrayList<Integer>> RGB = new ArrayList<>();
+	static ArrayList<String> guiComponents = new ArrayList<>();
 	ArrayList<Integer> partition;
-	private String TARGET_APP;
+	private static String TARGET_APP;
 	private static final int TARGET_APP_RUNNINGTIME = 3000;
 	private static final String JAVA_COMMAND = "java -jar ";
 	private double consumption = -1;
@@ -24,9 +24,7 @@ public class ChargeConsumption {
 	
 	public ChargeConsumption(String app){
 		TARGET_APP = app;
-		
-		
-		
+		guiComponents = new ArrayList<>();
 		guiComponents.add("mainFrameColor"); // both apps
 		guiComponents.add("jButton1");// both apps
 		guiComponents.add("jButton2");
@@ -65,61 +63,18 @@ public class ChargeConsumption {
 			e.printStackTrace();
 		}
 		
-		randomcreate();
+//		randomcreate();
 	}
 	
-	public void randomcreate(){
-		Random randomInt = new Random();
-		RGB = new ArrayList<>();
-        RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{randomInt.nextInt(256), randomInt.nextInt(256), randomInt.nextInt(256)})));
-        RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{randomInt.nextInt(256), randomInt.nextInt(256), randomInt.nextInt(256)})));
-        RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{randomInt.nextInt(256), randomInt.nextInt(256), randomInt.nextInt(256)})));
-        RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{randomInt.nextInt(256), randomInt.nextInt(256), randomInt.nextInt(256)})));
-        RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{randomInt.nextInt(256), randomInt.nextInt(256), randomInt.nextInt(256)})));
-        RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{randomInt.nextInt(256), randomInt.nextInt(256), randomInt.nextInt(256)})));
-        RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{randomInt.nextInt(256), randomInt.nextInt(256), randomInt.nextInt(256)})));
-        RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{randomInt.nextInt(256), randomInt.nextInt(256), randomInt.nextInt(256)})));
-        RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{randomInt.nextInt(256), randomInt.nextInt(256), randomInt.nextInt(256)})));
-        RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{randomInt.nextInt(256), randomInt.nextInt(256), randomInt.nextInt(256)})));
-        RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{randomInt.nextInt(256), randomInt.nextInt(256), randomInt.nextInt(256)})));
-        RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{randomInt.nextInt(256), randomInt.nextInt(256), randomInt.nextInt(256)})));
-        RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{randomInt.nextInt(256), randomInt.nextInt(256), randomInt.nextInt(256)})));
-        RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{randomInt.nextInt(256), randomInt.nextInt(256), randomInt.nextInt(256)})));
-        RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{randomInt.nextInt(256), randomInt.nextInt(256), randomInt.nextInt(256)})));
-        RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{randomInt.nextInt(256), randomInt.nextInt(256), randomInt.nextInt(256)})));
-        RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{randomInt.nextInt(256), randomInt.nextInt(256), randomInt.nextInt(256)})));
-        RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{randomInt.nextInt(256), randomInt.nextInt(256), randomInt.nextInt(256)})));
+	
 
-        RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{randomInt.nextInt(256), randomInt.nextInt(256), randomInt.nextInt(256)})));
-        RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{randomInt.nextInt(256), randomInt.nextInt(256), randomInt.nextInt(256)})));
-        RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{randomInt.nextInt(256), randomInt.nextInt(256), randomInt.nextInt(256)})));
-        RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{randomInt.nextInt(256), randomInt.nextInt(256), randomInt.nextInt(256)})));
-        RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{randomInt.nextInt(256), randomInt.nextInt(256), randomInt.nextInt(256)})));
-        RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{randomInt.nextInt(256), randomInt.nextInt(256), randomInt.nextInt(256)})));
-        RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{randomInt.nextInt(256), randomInt.nextInt(256), randomInt.nextInt(256)})));
-        RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{randomInt.nextInt(256), randomInt.nextInt(256), randomInt.nextInt(256)})));
-        RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{randomInt.nextInt(256), randomInt.nextInt(256), randomInt.nextInt(256)})));
-
-	}
 	
-	public ArrayList<ArrayList<Integer>> getRGB(){
-		return RGB;
-	}
-	
-	public void setRGB(ArrayList<ArrayList<Integer>> rgb){
-		RGB = new ArrayList<>();
-//		for(int i = 0; i < rgb.size(); i++){
-//			RGB.add(rgb.get(i));
-//		}
-		RGB = rgb;
-	}
-	
-	public double quick_evaluate(){
+	public double quick_evaluate(ArrayList<ArrayList<Integer>> RGB){
 		double fitness = 0;
 		Calculation cal = new Calculation();
 		
 //		System.out.println(applist.get(TARGET_APP).size() + "\t" + RGB.size());
-		if((!satisfiedconstraint()) ){
+		if((!satisfiedconstraint(RGB)) ){
 			fitness = 0-Double.MAX_VALUE;
 		}else{
 			for(int i = 0; i < RGB.size(); i++){
@@ -143,11 +98,13 @@ public class ChargeConsumption {
 			FileWriter out = new FileWriter(input);
 			
 			Calculation cl = new Calculation();
-			create_red(-1);
-			double base = 0 - evaluate(false);
+			Solution allblack = new Solution(TARGET_APP);
+			
+			double base = 0 - evaluate(create_red(-1),false);
 			for(int i = 0; i < guiComponents.size(); i++){
+				Solution partred = new Solution(TARGET_APP);
 				create_red(i);
-				double current =0 - evaluate(false);
+				double current =0 - evaluate(create_red(i),false);
 				int numberofpixels = (int) ((current-base)/cl.get_red_consumption_per_pixel());
 				System.out.println("current: " + current + "\tbase: " +base + "\tred:" + cl.get_red_consumption_per_pixel() +"\tnumberofpixels" +numberofpixels);
 				partition.add(numberofpixels);
@@ -160,21 +117,23 @@ public class ChargeConsumption {
 		return partition;
 	}
 	// mode= 1~27, -1 for all black
-	public void create_red(int mode){
-		RGB = new ArrayList<>();
+
+	public ArrayList<ArrayList<Integer>> create_red(int mode){
+		ArrayList<ArrayList<Integer>> rgb = new ArrayList<>();
 		for(int i =0; i <27; i++){
 			if(mode == i){
-				RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{255, 0, 0})));
+				rgb.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{255, 0, 0})));
 				continue;
 			}
-			RGB.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{0, 0, 0})));
+			rgb.add(new ArrayList<Integer>(Arrays.asList(new Integer[]{0, 0, 0})));
 		}
+		return rgb;
 	}
 	
 	//flag = true means consider the constraints, false means not
-	public double evaluate(boolean flag){
+	public static double evaluate(ArrayList<ArrayList<Integer>> RGB,boolean flag){
 		double fitness = 0;
-		if((!satisfiedconstraint()) && flag){
+		if((!satisfiedconstraint(RGB)) && flag){
 			fitness = 0 - Double.MAX_VALUE;
 		}else{
 			saveToCSV(getParentDir().concat("color.csv"), guiComponents, RGB);
@@ -191,7 +150,7 @@ public class ChargeConsumption {
 		return fitness;
 	}
 	
-	public boolean satisfiedconstraint(){
+	public static boolean satisfiedconstraint(ArrayList<ArrayList<Integer>> RGB){
 		int r = RGB.get(19).get(0) - RGB.get(20).get(0);
 		int g = RGB.get(19).get(1) - RGB.get(20).get(1);
 		int b = RGB.get(19).get(2) - RGB.get(20).get(2);
@@ -202,7 +161,7 @@ public class ChargeConsumption {
 		return true;
 	}
 	
-	public String getScreenShot(String path, int targetAppRunningtime) {
+	public static String getScreenShot(String path, int targetAppRunningtime) {
 		String filename = "";
 		try {
             //java -jar C:\Users\Mahmoud-Uni\Documents\NetBeansProjects\calculator\dist\calculator.jar
@@ -239,6 +198,7 @@ public class ChargeConsumption {
             BufferedWriter br = new BufferedWriter(new FileWriter(new File(filePath)));
             String line = "";
             for (int i = 0; i < guiComponents.size(); i++) {
+//            	System.out.println("i: " + i + "\tguisize:" + guiComponents.size() + "\tRGBsize: " + RGB.size());
                 line += guiComponents.get(i).concat(",").concat(RGB.get(i).toString().replace("[", "").replace("]", "").replaceAll("\\s", "")) + "\n";
 //                System.out.println(line);
             }
@@ -262,7 +222,7 @@ public class ChargeConsumption {
         return dir;
     }
     
-    public void output(){
+    public void output(ArrayList<ArrayList<Integer>> RGB){
     	saveToCSV(getParentDir().concat("bestcolor.csv"), guiComponents, RGB);
     	
     }
