@@ -9,10 +9,10 @@ public class RandomSearch {
 		double f2 = temp.getfitness();
 		
 		if(f1 < f2){
-			System.out.println("f1<f2:"+f2+"\t" +f1 +"\t" + f2);
+//			System.out.println("f1<f2:"+f2+"\t" +f1 +"\t" + f2);
 			return temp;
 		}else{
-			System.out.println("f1>=f2"+ f1 + "\t" + f1 + "\t" + f2);
+//			System.out.println("f1>=f2"+ f1 + "\t" + f1 + "\t" + f2);
 			return instance;
 		}
 	}

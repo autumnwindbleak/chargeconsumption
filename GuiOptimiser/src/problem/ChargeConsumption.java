@@ -222,8 +222,8 @@ public class ChargeConsumption {
         return dir;
     }
     
-    public void output(ArrayList<ArrayList<Integer>> RGB){
-    	saveToCSV(getParentDir().concat("bestcolor.csv"), guiComponents, RGB);
+    public void output(ArrayList<ArrayList<Integer>> RGB,String info){
+    	saveToCSV(getParentDir().concat("output/" + info + "-bestcolor.csv"), guiComponents, RGB);
     	
     }
 

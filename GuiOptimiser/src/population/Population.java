@@ -19,4 +19,35 @@ public class Population {
 			population.add(s);
 		}
 	}
+	
+	public void add(Solution instance){
+		if(population.size()>=populationsize){
+			System.out.println("population full");
+		}else{
+			population.add(instance);
+		}
+	}
+	
+	public Solution get(int i){
+		return population.get(i);
+	}
+	
+	public void empty(){
+		population = new ArrayList<Solution>();
+	}
+
+	public int size() {
+		// TODO Auto-generated method stub
+		return population.size();
+	}
+
+	public boolean full() {
+		// TODO Auto-generated method stub
+		if(population.size() >= populationsize){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
 }

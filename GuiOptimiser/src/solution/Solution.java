@@ -62,9 +62,9 @@ public class Solution {
 		return fitness;
 	}
 	
-	public void output(){
-		cc.output(RGB);
-		System.out.print("Consumption: " + (0 - cc.quick_evaluate(RGB)));
+	public void output(String info){
+		cc.output(RGB,info);
+		System.out.println(info + " Turns/Generation Consumption: " + (0 - cc.quick_evaluate(RGB)));
 	}
 	
 	public ArrayList<ArrayList<Integer>> getRGB(){
